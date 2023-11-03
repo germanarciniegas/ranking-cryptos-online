@@ -28,7 +28,8 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Ranking Cryptos</h1>
+      <h1>Ranking Cryptos Modulo 3</h1>
+      <p>This is a React App Made in js to Deplot in Vercel credits to CoinCap</p>
       {listCryptos.map((crypto) => <ItemCrypto 
             symbol={crypto.symbol}
             price={crypto.priceUsd}
