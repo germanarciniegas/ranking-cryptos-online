@@ -17,10 +17,15 @@ const sample = {
   explorer	:	"https://blockchain.info/"
 }
 
+const limit = 5;
+
 function App() {
   const[listCryptos, setListCryptos] = React.useState([]);
   const[displayCryptos, setDisplayCryptos] = React.useState([]);
   const[search, setSearch] = React.useState("");
+
+  const[page, setPage] = React.useState(1);
+  const offSet = (page-1)*limit;
 
   // const[shouldUpdate, setShouldUpdate] = React.useState(false);
 
@@ -59,14 +64,18 @@ function App() {
   ///{} === {} false
   ///()=>{} === ()=>{} false
 
-  React.useEffect(()=> {
-    fetch("https://api.coincap.io/v2/assets")
+  const fetchData = () => {
+    fetch("https://api.coincap.io/v2/assets?limit="+limit+"&offset="+offSet)
       .then((response) => response.json())
       .then((dataJson) => {
         setListCryptos(dataJson.data);
         setDisplayCryptos(dataJson.data);
       });
-  },[])
+  }
+
+  React.useEffect(()=> {
+    fetchData();
+  },[offSet])
 
   React.useEffect(()=>{
     console.log("Disparo de Effect");
@@ -93,6 +102,16 @@ function App() {
   //   //componentWillUnmount()
   // },[])
 
+  const siguiente = () => {
+    setPage(page => page + 1);
+  }
+
+  const atras = () => {
+    setPage(page => page - 1);
+  }
+
+  console.log(page, offSet, limit);
+
   return (
     <div className="App">
       <h1>Ranking Cryptos Modulo 3</h1>
@@ -109,7 +128,8 @@ function App() {
           />
         )
       }
-     
+      {page !== 1 && <button onClick={atras}>Atras</button>}
+     <button onClick={siguiente}>Siguiente</button>
     </div>
   );
 }
